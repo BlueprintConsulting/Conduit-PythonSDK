@@ -189,12 +189,12 @@ if __name__ == "__main__":
     obj = executeSyncQuery("SHOW DATABASES")
     print(obj)
 
-    query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___Flights_All LIMIT 10000")
-    cancelQuery(query)
+    #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___Flights_All LIMIT 10000")
+    #cancelQuery(query)
     #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___vw_airport_parsed LIMIT 1000000")
     #print(query)
     #if query.status == "Running":
-     #   cancelQuery(query.queryId)
+    #    cancelQuery(query.queryId)
 
     # dbs = getDatabases()
     # for db in dbs:
