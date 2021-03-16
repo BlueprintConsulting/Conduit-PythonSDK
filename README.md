@@ -33,7 +33,7 @@ for db in dbs:
 ```
 * Execute with the CONDUIT_TOKEN, CONDUIT_SERVER
 ```
-CONDUIT_SERVER=<server name> CONDUIT_TOKEN=<your token> python src/conduit_pkg/client.py
+CONDUIT_SERVER=<server name> CONDUIT_TOKEN=<your token> python test.py
 ```
 You should get something similar as output:
 ```
