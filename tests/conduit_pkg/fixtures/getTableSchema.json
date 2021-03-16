@@ -1,0 +1,774 @@
+{
+  "columns": [
+    {
+      "name": "_c109",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "ActualElapsedTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "AirTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "ArrDel15",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "ArrDelay",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "ArrDelayMinutes",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "ArrivalDelayGroups",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "ArrTime",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "ArrTimeBlk",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "CancellationCode",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Cancelled",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "CarrierDelay",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "CRSArrTime",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "CRSDepTime",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "CRSElapsedTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "DayofMonth",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "DayOfWeek",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "DepartureDelayGroups",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "DepDel15",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "DepDelay",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "DepDelayMinutes",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "DepTime",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "DepTimeBlk",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Dest",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "DestAirportID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "DestAirportSeqID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "DestCityMarketID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "DestCityName",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "DestState",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "DestStateFips",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "DestStateName",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "DestWac",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Distance",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "DistanceGroup",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div1Airport",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div1AirportID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div1AirportSeqID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div1LongestGTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Div1TailNum",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div1TotalGTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Div1WheelsOff",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div1WheelsOn",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div2Airport",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div2AirportID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div2AirportSeqID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div2LongestGTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Div2TailNum",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div2TotalGTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Div2WheelsOff",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div2WheelsOn",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div3Airport",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div3AirportID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div3AirportSeqID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div3LongestGTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Div3TailNum",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div3TotalGTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Div3WheelsOff",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div3WheelsOn",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Div4Airport",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div4AirportID",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div4AirportSeqID",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div4LongestGTime",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div4TailNum",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div4TotalGTime",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div4WheelsOff",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div4WheelsOn",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div5Airport",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div5AirportID",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div5AirportSeqID",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div5LongestGTime",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div5TailNum",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div5TotalGTime",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div5WheelsOff",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Div5WheelsOn",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "DivActualElapsedTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "DivAirportLandings",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "DivArrDelay",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "DivDistance",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Diverted",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "DivReachedDest",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "DOT_ID_Reporting_Airline",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "FirstDepTime",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Flight_Number_Reporting_Airline",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "FlightDate",
+      "colType": "date",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 91
+    },
+    {
+      "name": "Flights",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "IATA_CODE_Reporting_Airline",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "LateAircraftDelay",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "LongestAddGTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Month",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "NASDelay",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Origin",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "OriginAirportID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "OriginAirportSeqID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "OriginCityMarketID",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "OriginCityName",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "OriginState",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "OriginStateFips",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "OriginStateName",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "OriginWac",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Quarter",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    },
+    {
+      "name": "Reporting_Airline",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "SecurityDelay",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "Tail_Number",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "TaxiIn",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "TaxiOut",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "TotalAddGTime",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "WeatherDelay",
+      "colType": "float",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 8
+    },
+    {
+      "name": "WheelsOff",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "WheelsOn",
+      "colType": "nvarchar",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 1111
+    },
+    {
+      "name": "Year",
+      "colType": "int",
+      "lengthOpt": null,
+      "scaleOpt": null,
+      "sqlType": 4
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "tables": [
+    {
+      "table": "TransStats___vw_airport_parsed",
+      "database": "sql_synapse_flights",
+      "schema": "sql_synapse_flights",
+      "tableType": "TABLE"
+    },
+    {
+      "table": "TransStats___dimCarriers",
+      "database": "sql_synapse_flights",
+      "schema": "sql_synapse_flights",
+      "tableType": "TABLE"
+    },
+    {
+      "table": "TransStats___dimCalendar",
+      "database": "sql_synapse_flights",
+      "schema": "sql_synapse_flights",
+      "tableType": "TABLE"
+    },
+    {
+      "table": "TransStats___dimAirportsGeoCoded",
+      "database": "sql_synapse_flights",
+      "schema": "sql_synapse_flights",
+      "tableType": "TABLE"
+    },
+    {
+      "table": "TransStats___dimAirports",
+      "database": "sql_synapse_flights",
+      "schema": "sql_synapse_flights",
+      "tableType": "TABLE"
+    },
+    {
+      "table": "TransStats___Flights_All",
+      "database": "sql_synapse_flights",
+      "schema": "sql_synapse_flights",
+      "tableType": "TABLE"
+    },
+    {
+      "table": "TransStats___Flights",
+      "database": "sql_synapse_flights",
+      "schema": "sql_synapse_flights",
+      "tableType": "TABLE"
+    },
+    {
+      "table": "TransStats___Flight_Hold",
+      "database": "sql_synapse_flights",
+      "schema": "sql_synapse_flights",
+      "tableType": "TABLE"
+    }
+  ]
+}

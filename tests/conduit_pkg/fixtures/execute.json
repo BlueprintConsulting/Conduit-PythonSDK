@@ -1,0 +1,71 @@
+{
+  "queryId": "ac99e49f-09bd-47d4-b427-0c76f5adc1a4",
+  "status": "Finished",
+  "message": null,
+  "data": {
+    "columns": [
+      "Result"
+    ],
+    "rows": [
+      {
+        "Result": "awss3_s3"
+      },
+      {
+        "Result": "es_conduit"
+      },
+      {
+        "Result": "es_elasticsearch"
+      },
+      {
+        "Result": "es_es_es1"
+      },
+      {
+        "Result": "es_es_es2"
+      },
+      {
+        "Result": "file_blob"
+      },
+      {
+        "Result": "file_blob_books"
+      },
+      {
+        "Result": "file_blob_clone1"
+      },
+      {
+        "Result": "file_costi_blob"
+      },
+      {
+        "Result": "file_olga_blob"
+      },
+      {
+        "Result": "file_pitul_conn"
+      },
+      {
+        "Result": "odata_odata"
+      },
+      {
+        "Result": "oracle_oracle_localhost"
+      },
+      {
+        "Result": "postgresql_postgres_conduit"
+      },
+      {
+        "Result": "postgresql_postgres_postgres"
+      },
+      {
+        "Result": "postgresql_qa_test"
+      },
+      {
+        "Result": "redshift_redshift"
+      },
+      {
+        "Result": "redshift_redshiftcluster1_flights_clone"
+      },
+      {
+        "Result": "sql_synapse_flights"
+      }
+    ],
+    "hasNext": false,
+    "hasPrevious": false
+  }
+}
