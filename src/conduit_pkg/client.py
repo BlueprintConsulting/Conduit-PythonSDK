@@ -86,7 +86,7 @@ def cancelQuery(queryObj):
         if data['isCancelled'] == False:
             print("Query {} isn't cancelled yet...checking again".format(queryObj.queryId))
             time.sleep(2)
-            cancelQuery(queryGUID)
+            cancelQuery(queryObj)
         else:
             return True
 
@@ -194,7 +194,7 @@ if __name__ == "__main__":
     #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___vw_airport_parsed LIMIT 1000000")
     #print(query)
     #if query.status == "Running":
-    #    cancelQuery(query.queryId)
+    #    cancelQuery(query)
 
     # dbs = getDatabases()
     # for db in dbs:
