@@ -84,10 +84,14 @@ def cancelQuery(queryObj):
     data = getOnTheWire("/cancel?queryId={}".format(queryObj.queryId))
     if type(data) == dict:
         if data['isCancelled'] == False:
-            print("Query {} isn't cancelled yet...checking again".format(queryObj.queryId))
+            logger.info("Query {} isn't cancelled yet...checking again".format(queryObj.queryId))
             time.sleep(2)
             cancelQuery(queryObj)
+        elif data['isCancelled'] == True:
+            logger.info("Query {} successfully cancelled!!".format(queryObj.queryId))
+            return True
         else:
+            logger.info("Query in a strange state: {}".format(data['isCancelled']))
             return True
 
 
@@ -189,7 +193,7 @@ if __name__ == "__main__":
     obj = executeSyncQuery("SHOW DATABASES")
     print(obj)
 
-    #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___Flights_All LIMIT 10000")
+    #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___Flights_All LIMIT 10000000")
     #cancelQuery(query)
     #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___vw_airport_parsed LIMIT 1000000")
     #print(query)
