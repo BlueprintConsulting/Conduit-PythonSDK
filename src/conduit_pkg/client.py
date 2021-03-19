@@ -63,7 +63,7 @@ def getAllMetadata():
 def getOnTheWire(endpoint):
     headers = {
         'accept': 'application/json',
-        'Authorization': 'Token {}'.format(token())
+        'Authorization': 'Bearer {}'.format(token())
     }
     url = 'https://{}/query{}'.format(server(), endpoint)
     resp = requests.get(url, headers = headers)
@@ -79,7 +79,7 @@ def cancelQuery(queryObj):
     if queryObj.status != "Running":
         logger.info("Query {} isn't marked as running, won't attempt to cancel.".format(queryObj.queryId))
         return True
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/cancel?queryId={queryId}" -H  "accept: application/json" -H "Authorization: Token $CONDUIT_TOKEN"'
+    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/cancel?queryId={queryId}" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
     logger.debug("Calling cancelQuery, equivalent curl: {}".format(curlstring))
     data = getOnTheWire("/cancel?queryId={}".format(queryObj.queryId))
     if type(data) == dict:
@@ -107,7 +107,7 @@ def processQueryResult(dataDict):
         print("Query {} isn't finished, but in status: {}".format(qObj.queryId, qObj.status))
     return qObj
 def getQueryResult(queryId):
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/execute/{queryId}/result" -H  "accept: application/json" -H "Authorization: Token $CONDUIT_TOKEN"'
+    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/execute/{queryId}/result" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
     logger.debug("Calling getQueryResult, equivalent curl: {}".format(curlstring))
     data = getOnTheWire("/execute/{}/result".format(queryId))
     if type(data) == dict:
@@ -115,7 +115,7 @@ def getQueryResult(queryId):
 
 def executeSyncQuery(sqlString):
     sqlEncoded = urllib.parse.quote(sqlString)
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/execute?query=SHOW+*+TABLES" -H  "accept: application/json" -H "Authorization: Token $CONDUIT_TOKEN"'
+    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/execute?query=SHOW+*+TABLES" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
     logger.debug("Calling executeSyncQuery, equivalent curl: {}".format(curlstring))
     data = getOnTheWire("/execute?query={}".format(sqlEncoded))
     if type(data) == dict:
@@ -123,7 +123,7 @@ def executeSyncQuery(sqlString):
 
 def executeAsyncQuery(sqlString):
     sqlEncoded = urllib.parse.quote(sqlString)
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/execute?query=SHOW+*+TABLES" -H  "accept: application/json" -H "Authorization: Token $CONDUIT_TOKEN"'
+    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/execute?query=SHOW+*+TABLES" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
     logger.debug("Calling executeSyncQuery, equivalent curl: {}".format(curlstring))
     data = getOnTheWire("/execute?query={}".format(sqlEncoded))
     if type(data) == dict:
@@ -137,7 +137,7 @@ def executeAsyncQuery(sqlString):
         return qObj
 
 def getTables(database):
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/metadata/databases/{database}/tables" -H  "accept: application/json" -H "Authorization: Token $CONDUIT_TOKEN"'
+    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/metadata/databases/{database}/tables" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
     logger.debug("Calling getTables, equivalent curl: {}".format(curlstring))
     data = getOnTheWire("/metadata/databases/{}/tables".format(database))
     if data != None:
@@ -150,7 +150,7 @@ def getTables(database):
         logger.error("Error in the getDatabases call: curl would be {}".format(curlstring))
 
 def getTableSchema(database, table):
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/metadata/databases/{database}/tables/{table}/schema" -H  "accept: application/json" -H "Authorization: Token $CONDUIT_TOKEN"'
+    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/metadata/databases/{database}/tables/{table}/schema" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
     logger.debug("Calling getTableSchema, equivalent curl: {}".format(curlstring))
     data = getOnTheWire("/metadata/databases/{}/tables/{}/schema".format(database, table))
     if data != None:
@@ -175,9 +175,10 @@ def server():
         return os.environ["CONDUIT_SERVER"]
 
 def getDatabases():
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/metadata/databases" -H  "accept: application/json" -H "Authorization: Token $CONDUIT_TOKEN"'
+    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/metadata/databases" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
     logger.debug("Calling getDatabases, equivalent curl: {}".format(curlstring))
     data = getOnTheWire("/metadata/databases")
+    print(data)
     if data != None:
         dbs = []
         for db in data['databases']:
@@ -190,8 +191,8 @@ def getDatabases():
 if __name__ == "__main__":
     if token() == None or server() == None:
         raise Exception("You'll need to set the CONDUIT_TOKEN and CONDUIT_SERVER envvars to use this.")
-    obj = executeSyncQuery("SHOW DATABASES")
-    print(obj)
+    #obj = executeSyncQuery("SHOW DATABASES")
+    #print(obj)
 
     #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___Flights_All LIMIT 10000000")
     #cancelQuery(query)
@@ -200,6 +201,6 @@ if __name__ == "__main__":
     #if query.status == "Running":
     #    cancelQuery(query)
 
-    # dbs = getDatabases()
-    # for db in dbs:
-    #     print(db)
+    dbs = getDatabases()
+    for db in dbs:
+         print(db)
