@@ -1,13 +1,12 @@
 import os, logging, requests, urllib.parse, time
 #from src.conduit_pkg.conduitEntities import Database, Table, Column, QueryResult
+from query import Query
 
 logging.basicConfig(
     format="%(name)s-%(levelname)s-%(asctime)s-%(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-
 
 class Database(object):
     def __init__(self, database):
@@ -40,20 +39,6 @@ class Column(object):
             self.lengthOpt,
             self.scaleOpt,
             self.sqlType
-        )
-
-class QueryResult(object):
-    def __init__(self, jsonLoad):
-        self.json = jsonLoad
-        self.parseDict()
-    def parseDict(self):
-        self.queryId = self.json['queryId']
-        self.status = self.json['status']
-        self.message = self.json['message']
-        self.data = self.json['data']
-    def __str__(self):
-        return "QueryId: {}, with status: {}, has message: {}, check 'data' attribute for data.".format(
-            self.queryId, self.status, self.message
         )
 
 
@@ -93,48 +78,6 @@ def cancelQuery(queryObj):
         else:
             logger.info("Query in a strange state: {}".format(data['isCancelled']))
             return True
-
-
-def processQueryResult(dataDict):
-    qObj = QueryResult(dataDict)
-    if qObj.status == "Finished":
-        logger.info(qObj)
-    elif qObj.status == "Running":
-        logger.info("Query {} is Running".format(qObj.queryId, qObj.status))
-        time.sleep(2)
-        getQueryResult(qObj.queryId)
-    else:
-        print("Query {} isn't finished, but in status: {}".format(qObj.queryId, qObj.status))
-    return qObj
-def getQueryResult(queryId):
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/execute/{queryId}/result" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
-    logger.debug("Calling getQueryResult, equivalent curl: {}".format(curlstring))
-    data = getOnTheWire("/execute/{}/result".format(queryId))
-    if type(data) == dict:
-        processQueryResult(data)
-
-def executeSyncQuery(sqlString):
-    sqlEncoded = urllib.parse.quote(sqlString)
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/execute?query=SHOW+*+TABLES" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
-    logger.debug("Calling executeSyncQuery, equivalent curl: {}".format(curlstring))
-    data = getOnTheWire("/execute?query={}".format(sqlEncoded))
-    if type(data) == dict:
-        return processQueryResult(data)
-
-def executeAsyncQuery(sqlString):
-    sqlEncoded = urllib.parse.quote(sqlString)
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/execute?query=SHOW+*+TABLES" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
-    logger.debug("Calling executeSyncQuery, equivalent curl: {}".format(curlstring))
-    data = getOnTheWire("/execute?query={}".format(sqlEncoded))
-    if type(data) == dict:
-        qObj = QueryResult(data)
-        if qObj.status == "Finished":
-            print("Query {} was executed async, but already finished".format(qObj.queryId))
-        elif qObj.status == "Running":
-            print("Query {} is Running".format(qObj.queryId, qObj.status))
-        else:
-            print("Query {} isn't finished, but in status: {}".format(qObj.queryId, qObj.status))
-        return qObj
 
 def getTables(database):
     curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/metadata/databases/{database}/tables" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
@@ -188,19 +131,35 @@ def getDatabases():
     else:
         logger.error("Error in the getDatabases call: curl would be {}".format(curlstring))
 
+def executeQuery(sqlstring, windowSize):
+    query = Query(server(), token(), sqlstring, windowSize)
+    query.executeQuery()
+    data = query.DataSlices
+    return data
+
 if __name__ == "__main__":
     if token() == None or server() == None:
         raise Exception("You'll need to set the CONDUIT_TOKEN and CONDUIT_SERVER envvars to use this.")
     #obj = executeSyncQuery("SHOW DATABASES")
     #print(obj)
 
-    #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___Flights_All LIMIT 10000000")
+    #query = executeSyncQuery("SELECT * FROM sql_synapse_flights.TransStats___Flights_All LIMIT 1000")
+    tables = getTables("file_costi_blob")
+    for tbl in tables:
+        print(tbl)
+
+    data = executeQuery("SELECT * FROM `file_costi_blob`.`titanic.csv` LIMIT 50", 100000)
+    for slice in data:
+        print(slice)
+
     #cancelQuery(query)
     #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___vw_airport_parsed LIMIT 1000000")
+
     #print(query)
+    #print(query.data)
     #if query.status == "Running":
     #    cancelQuery(query)
 
-    dbs = getDatabases()
-    for db in dbs:
-         print(db)
+    # dbs = getDatabases()
+    # for db in dbs:
+    #      print(db)
