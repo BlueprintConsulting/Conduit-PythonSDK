@@ -253,16 +253,15 @@ if __name__ == "__main__":
         raise Exception("You'll need to set the CONDUIT_TOKEN and CONDUIT_SERVER envvars to use this.")
     #obj = executeSyncQuery("SHOW DATABASES")
     #print(obj)
-
     #query = executeSyncQuery("SELECT * FROM sql_synapse_flights.TransStats___Flights_All LIMIT 1000")
-    tables = getTables("file_costi_blob")
-    for tbl in tables:
-        print(tbl)
+    # tables = getTables("file_costi_blob")
+    # for tbl in tables:
+    #     print(tbl)
 
-#    data = executeQuery("SELECT * FROM `file_costi_blob`.`titanic.csv` LIMIT 50", 100000)
-    data = executeQuery("SELECT * FROM postgresql_postgres_conduit.public___taxi_dataset LIMIT 10000", 10000, 10)
-    for slice in data:
-        print(slice)
+#   data = executeQuery("SELECT * FROM `file_costi_blob`.`titanic.csv` LIMIT 50", 100000)
+#     data = executeQuery("SELECT * FROM postgresql_postgres_conduit.public___taxi_dataset LIMIT 10000", 10000, 10)
+#     for slice in data:
+#         print(slice)
 
     #cancelQuery(query)
     #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___vw_airport_parsed LIMIT 1000000")
