@@ -7,7 +7,8 @@ import json
 
 def mockGetDatabases():
     pass
-class TestCancel(unittest.TestCase):
+
+class TestClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         logger.setLevel(level=logging.DEBUG)
@@ -90,81 +91,20 @@ class TestCancel(unittest.TestCase):
             objs = getTables('test')
             self.assertEqual(2, len(objs))
 
-    def test_executeSyncQuery(self):
-        response = '''{
-  "queryId": "ac99e49f-09bd-47d4-b427-0c76f5adc1a4",
-  "status": "Finished",
-  "message": null,
-  "data": {
-    "columns": [
-      "Result"
-    ],
-    "rows": [
-      {
-        "Result": "awss3_s3"
-      },
-      {
-        "Result": "es_conduit"
-      }
-    ],
-    "hasNext": false,
-    "hasPrevious": false
-  }
-}
-'''
-        with patch('requests.get') as mock_request:
-            mock_request.return_value.status_code = 200
-            mock_request.return_value.json.return_value = json.loads(response)
-            sqlString = "TEST SQL DUMMY STRING"
-            obj = executeSyncQuery(sqlString)
-            self.assertTrue(obj.status, "Finished")
-            self.assertEqual(2, len(obj.data['rows']))
-            self.assertEqual("es_conduit", obj.data['rows'][1]['Result'])
 
-    def test_executeAsyncQuery(self):
-        finishedResponse = '''{
-  "queryId": "ac99e49f-09bd-47d4-b427-0c76f5adc1a4",
-  "status": "Finished",
-  "message": null,
-  "data": {
-    "columns": [
-      "Result"
-    ],
-    "rows": [
-      {
-        "Result": "awss3_s3"
-      },
-      {
-        "Result": "es_conduit"
-      }
-    ],
-    "hasNext": false,
-    "hasPrevious": false
-  }
-}
-'''
-        with patch('requests.get') as mock_request:
-            mock_request.return_value.status_code = 200
-            mock_request.return_value.json.return_value = json.loads(finishedResponse)
-            sqlString = "TEST SQL DUMMY STRING"
-            obj = executeAsyncQuery(sqlString)
-            self.assertTrue(obj.queryId, "ac99e49f-09bd-47d4-b427-0c76f5adc1a4")
 
-    def test_cancelQuery(self):
-        queryResponse = '''{
-          "queryId": "ac99e49f-09bd-47d4-b427-0c76f5adc1a4",
-          "status": "Running",
-          "message": null,
-          "data": null
-}
-'''
-        response = '''{"isCancelled": true}'''
-        with patch('requests.get') as mock_request:
-            mock_request.return_value.status_code = 200
-            mock_request.return_value.json.return_value = json.loads(response)
-            qObj = QueryResult(json.loads(queryResponse))
-            cancelled = cancelQuery(qObj)
-            self.assertTrue(cancelled)
+
+    # def test_executeQuery(self):
+    #     responseFinished = '''{"queryId":"7bba5aec-2641-420e-be82-87015dcb0d7d","status":"Finished","message":null,"data":{"columns":["PassengerId","Survived","Pclass","Name","Sex","Age","SibSp","Parch","Ticket","Fare","Cabin","Embarked"],"rows":[{"PassengerId":1,"Name":"Braund, Mr. Owen Harris","Ticket":"A/5 21171","Pclass":3,"Parch":0,"Embarked":"S","Age":22,"Cabin":"","Fare":7.25,"SibSp":1,"Survived":0,"Sex":"male"},{"PassengerId":2,"Name":"Cumings, Mrs. John Bradley (Florence Briggs Thayer)","Ticket":"PC 17599","Pclass":1,"Parch":0,"Embarked":"C","Age":38,"Cabin":"C85","Fare":71.2833,"SibSp":1,"Survived":1,"Sex":"female"},{"PassengerId":3,"Name":"Heikkinen, Miss. Laina","Ticket":"STON/O2. 3101282","Pclass":3,"Parch":0,"Embarked":"S","Age":26,"Cabin":"","Fare":7.925,"SibSp":0,"Survived":1,"Sex":"female"},{"PassengerId":4,"Name":"Futrelle, Mrs. Jacques Heath (Lily May Peel)","Ticket":"113803","Pclass":1,"Parch":0,"Embarked":"S","Age":35,"Cabin":"C123","Fare":53.1,"SibSp":1,"Survived":1,"Sex":"female"},{"PassengerId":5,"Name":"Allen, Mr. William Henry","Ticket":"373450","Pclass":3,"Parch":0,"Embarked":"S","Age":35,"Cabin":"","Fare":8.05,"SibSp":0,"Survived":0,"Sex":"male"},{"PassengerId":6,"Name":"Moran, Mr. James","Ticket":"330877","Pclass":3,"Parch":0,"Embarked":"Q","Age":60,"Cabin":"","Fare":8.4583,"SibSp":0,"Survived":0,"Sex":"male"},{"PassengerId":7,"Name":"McCarthy, Mr. Timothy J","Ticket":"17463","Pclass":1,"Parch":0,"Embarked":"S","Age":54,"Cabin":"E46","Fare":51.8625,"SibSp":0,"Survived":0,"Sex":"male"},{"PassengerId":8,"Name":"Palsson, Master. Gosta Leonard","Ticket":"349909","Pclass":3,"Parch":1,"Embarked":"S","Age":2,"Cabin":"","Fare":21.075,"SibSp":3,"Survived":0,"Sex":"male"},{"PassengerId":9,"Name":"Johnson, Mrs. Oscar W (Elisabeth Vilhelmina Berg)","Ticket":"347742","Pclass":3,"Parch":2,"Embarked":"S","Age":27,"Cabin":"","Fare":11.1333,"SibSp":0,"Survived":1,"Sex":"female"},{"PassengerId":10,"Name":"Nasser, Mrs. Nicholas (Adele Achem)","Ticket":"237736","Pclass":2,"Parch":0,"Embarked":"C","Age":14,"Cabin":"","Fare":30.0708,"SibSp":1,"Survived":1,"Sex":"female"}],"hasNext":true,"hasPrevious":false}}'''
+    #     with patch('requests.get') as mock_request:
+    #         mock_request.return_value.status_code = 200
+    #         mock_request.return_value.json.return_value = json.loads(responseFinished)
+    #         sqlString = "TEST SQL DUMMY STRING"
+    #         obj = executeQuery(sqlString, 10, 10)
+    #         self.assertTrue(obj.status, "Finished")
+    #         self.assertEqual(2, len(obj.data['rows']))
+    #         self.assertEqual("es_conduit", obj.data['rows'][1]['Result'])
+
 
 if __name__ == '__main__':
     unittest.main()

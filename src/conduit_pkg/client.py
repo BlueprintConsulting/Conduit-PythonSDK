@@ -1,12 +1,142 @@
 import os, logging, requests, urllib.parse, time
-#from src.conduit_pkg.conduitEntities import Database, Table, Column, QueryResult
-from query import Query
 
 logging.basicConfig(
     format="%(name)s-%(levelname)s-%(asctime)s-%(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+class QueryResult(object):
+    def __init__(self, jsonLoad):
+        self.json = jsonLoad
+        self.parseDict()
+    def parseDict(self):
+        self.queryId = self.json['queryId']
+        self.status = self.json['status']
+        self.message = self.json['message']
+        self.data = self.json['data']
+        if self.data != None and type(self.data) == dict and len(self.data) > 0:
+            self.hasNext = self.data['hasNext']
+            self.hasPrevious = self.data['hasPrevious']
+    def __str__(self):
+        return "QueryId: {}, with status: {}, has message: {}, check 'data' attribute for data.".format(
+            self.queryId, self.status, self.message
+        )
+
+class Query(object):
+    def __init__(self, server, token, sqlstring, windowsize=100, timeout=30):
+        self.Server = server
+        self.Token = token
+        self.SQLString = sqlstring
+        self.WindowSize = windowsize
+        self.Timeout = timeout
+        self.Offset = 0
+        self.QueryId = None
+        self.QueryResult = None
+        self.StartTime = None
+        self.DataSlices = []
+        self.MaxWindowSize = 1000
+        self.WindowSize = windowsize if windowsize < self.MaxWindowSize else self.MaxWindowSize
+    def __str__(self):
+        return "Query has ID {}, Offset {}, Windowsize {}".format(self.QueryId, self.Offset, self.WindowSize)
+
+    def cancelQuery(self):
+        logger.info("Forcing a cancel due to exceeding timeout...")
+        self.DataSlices = []
+        headers = {
+            'accept': 'application/json',
+            'Authorization': 'Bearer {}'.format(self.Token)
+        }
+
+        url = 'https://{}/query/cancel?queryId={}'.format(self.Server, self.QueryId)
+        resp = requests.get(url, headers=headers)
+        jsondict = json.loads(resp.text)
+        if type(jsondict) == dict:
+            if jsondict['isCancelled'] == False:
+                logger.info("Query {} isn't cancelled yet...checking again".format(self.QueryId))
+                time.sleep(2)
+                self.cancelQuery()
+            elif jsondict['isCancelled'] == True:
+                logger.info("Query {} successfully cancelled!!".format(self.QueryId))
+                return True
+            else:
+                logger.info("Query in a strange state: {}".format(jsondict['isCancelled']))
+                return True
+    def timedOut(self):
+        if self.StartTime == None:
+            self.StartTime = time.time()
+            return False
+        else:
+            elapsed_time = time.time() - self.StartTime
+            if elapsed_time >= self.Timeout:
+                return True
+            else:
+                return False
+
+    def checkQuery(self):
+        if self.timedOut():
+            self.cancelQuery()
+            return
+
+        headers = {
+            'accept': 'application/json',
+            'Authorization': 'Bearer {}'.format(self.Token)
+        }
+        url = 'https://{}/query/execute/{}/result'.format(self.Server, self.QueryId)
+        logger.info("Getting URL: {}".format(url))
+        resp = requests.get(url, headers=headers)
+        if resp.status_code == 200:
+            data = resp.json()
+            if type(data) == dict:
+                self.processQueryResult(data)
+        else:
+            logger.error("There was an error posting query:{}".format(resp.status_code))
+
+
+    def executeQuery(self):
+        if self.timedOut():
+            self.cancelQuery()
+            return
+
+        headers = {
+            'accept': 'application/json',
+            'Authorization': 'Bearer {}'.format(self.Token)
+        }
+        url = 'https://{}/query/execute'.format(self.Server)
+        payload = dict()
+        payload["queryId"] = self.QueryId
+        payload["query"] = self.SQLString
+        payload["offset"] = self.Offset
+        payload["limit"] = self.WindowSize
+        logger.info("Posting URL: {}, with payload: {}".format(url, payload))
+        resp = requests.post(url, headers=headers, json=payload)
+
+        if resp.status_code == 200:
+            data = resp.json()
+            if type(data) == dict:
+                self.processQueryResult(data)
+        else:
+            logger.error("There was an error posting query:{}".format(resp.status_code))
+
+    def processQueryResult(self, dataDict):
+        self.QueryResult = QueryResult(dataDict)
+        self.QueryId = self.QueryResult.queryId
+        self.DataSlices.append(dataDict)
+        logger.info("Processing query...{}".format(self.QueryResult.queryId))
+
+        if self.QueryResult.status == "Finished":
+            if self.QueryResult.hasNext:
+                logger.info("Query is finished, but has more, so paging...")
+                self.Offset = self.Offset + self.WindowSize
+                print(self)
+                self.executeQuery()
+        elif self.QueryResult.status == "Running":
+            time.sleep(2)
+            logger.info("Query is Running, need to poll for completion...")
+            self.checkQuery()
+        else:
+            logger.info("Query isn't running or finished: {}".format(self))
+
 
 class Database(object):
     def __init__(self, database):
@@ -60,25 +190,6 @@ def getOnTheWire(endpoint):
     else:
         logger.error("There was an error calling endpoint {}".format(endpoint))
 
-def cancelQuery(queryObj):
-    if queryObj.status != "Running":
-        logger.info("Query {} isn't marked as running, won't attempt to cancel.".format(queryObj.queryId))
-        return True
-    curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/cancel?queryId={queryId}" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
-    logger.debug("Calling cancelQuery, equivalent curl: {}".format(curlstring))
-    data = getOnTheWire("/cancel?queryId={}".format(queryObj.queryId))
-    if type(data) == dict:
-        if data['isCancelled'] == False:
-            logger.info("Query {} isn't cancelled yet...checking again".format(queryObj.queryId))
-            time.sleep(2)
-            cancelQuery(queryObj)
-        elif data['isCancelled'] == True:
-            logger.info("Query {} successfully cancelled!!".format(queryObj.queryId))
-            return True
-        else:
-            logger.info("Query in a strange state: {}".format(data['isCancelled']))
-            return True
-
 def getTables(database):
     curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/metadata/databases/{database}/tables" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
     logger.debug("Calling getTables, equivalent curl: {}".format(curlstring))
@@ -131,8 +242,8 @@ def getDatabases():
     else:
         logger.error("Error in the getDatabases call: curl would be {}".format(curlstring))
 
-def executeQuery(sqlstring, windowSize):
-    query = Query(server(), token(), sqlstring, windowSize)
+def executeQuery(sqlstring, windowSize, timeout):
+    query = Query(server(), token(), sqlstring, windowSize, timeout)
     query.executeQuery()
     data = query.DataSlices
     return data
@@ -148,7 +259,8 @@ if __name__ == "__main__":
     for tbl in tables:
         print(tbl)
 
-    data = executeQuery("SELECT * FROM `file_costi_blob`.`titanic.csv` LIMIT 50", 100000)
+#    data = executeQuery("SELECT * FROM `file_costi_blob`.`titanic.csv` LIMIT 50", 100000)
+    data = executeQuery("SELECT * FROM postgresql_postgres_conduit.public___taxi_dataset LIMIT 10000", 10000, 10)
     for slice in data:
         print(slice)
 
