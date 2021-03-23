@@ -1,4 +1,4 @@
-import os, logging, requests, urllib.parse, time
+import os, logging, requests, urllib.parse, time, json
 
 logging.basicConfig(
     format="%(name)s-%(levelname)s-%(asctime)s-%(message)s", level=logging.INFO
@@ -243,6 +243,13 @@ def getDatabases():
         logger.error("Error in the getDatabases call: curl would be {}".format(curlstring))
 
 def executeQuery(sqlstring, windowSize, timeout):
+    """Executes a query on the query/execute Conduit endpoint.
+
+    :param sqlstring: The SQL String you wish to execute. You may want to put a LIMIT clause on it.
+    :param windowSize: This is the pagination window that you desire.
+    :param timeout: This is the value (in seconds) that you wish to wait before canceling.
+    :return: This returns a list of dictionaries of the appropriate window size.
+    """
     query = Query(server(), token(), sqlstring, windowSize, timeout)
     query.executeQuery()
     data = query.DataSlices
@@ -251,17 +258,17 @@ def executeQuery(sqlstring, windowSize, timeout):
 if __name__ == "__main__":
     if token() == None or server() == None:
         raise Exception("You'll need to set the CONDUIT_TOKEN and CONDUIT_SERVER envvars to use this.")
-    #obj = executeSyncQuery("SHOW DATABASES")
+    #obj = executeQuery("SHOW DATABASES", 10, 10)
     #print(obj)
     #query = executeSyncQuery("SELECT * FROM sql_synapse_flights.TransStats___Flights_All LIMIT 1000")
     # tables = getTables("file_costi_blob")
     # for tbl in tables:
     #     print(tbl)
 
-#   data = executeQuery("SELECT * FROM `file_costi_blob`.`titanic.csv` LIMIT 50", 100000)
-#     data = executeQuery("SELECT * FROM postgresql_postgres_conduit.public___taxi_dataset LIMIT 10000", 10000, 10)
-#     for slice in data:
-#         print(slice)
+    #data = executeQuery("SELECT * FROM `file_costi_blob`.`titanic.csv` LIMIT 50000", 100000, 1)
+    data = executeQuery("SELECT * FROM postgresql_postgres_conduit.public___taxi_dataset LIMIT 10000", 10000, 1)
+    for slice in data:
+         print(slice)
 
     #cancelQuery(query)
     #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___vw_airport_parsed LIMIT 1000000")
