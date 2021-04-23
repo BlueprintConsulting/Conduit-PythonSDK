@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="bpcs-conduit", # Replace with your own username
-    version="0.0.8",
+    version="0.0.9",
     author="Allen Plummer",
     author_email="ahplummer@gmail.com",
     description="Python SDK for BPCS Conduit data virtualization tool",

@@ -24,21 +24,20 @@ class QueryResult(object):
         )
 
 class Query(object):
-    def __init__(self, server, token, sqlstring, windowsize=100, timeout=30):
+    def __init__(self, server, token, sqlstring, pagesize=100, timeout=30):
         self.Server = server
         self.Token = token
         self.SQLString = sqlstring
-        self.WindowSize = windowsize
+        self.PageSize = pagesize
         self.Timeout = timeout
-        self.Offset = 0
         self.QueryId = None
         self.QueryResult = None
         self.StartTime = None
         self.DataSlices = []
-        self.MaxWindowSize = 1000
-        self.WindowSize = windowsize if windowsize < self.MaxWindowSize else self.MaxWindowSize
+        self.MaxPageSize = 1000
+        self.PageSize = pagesize if pagesize < self.MaxPageSize else self.MaxPageSize
     def __str__(self):
-        return "Query has ID {}, Offset {}, Windowsize {}".format(self.QueryId, self.Offset, self.WindowSize)
+        return "Query has ID {}, Pagesize {}".format(self.QueryId, self.PageSize)
 
     def cancelQuery(self):
         logger.info("Forcing a cancel due to exceeding timeout...")
@@ -48,7 +47,7 @@ class Query(object):
             'Authorization': 'Bearer {}'.format(self.Token)
         }
 
-        url = 'https://{}/query/cancel?queryId={}'.format(self.Server, self.QueryId)
+        url = 'https://{}/api/query/cancel?queryId={}'.format(self.Server, self.QueryId)
         resp = requests.get(url, headers=headers)
         jsondict = json.loads(resp.text)
         if type(jsondict) == dict:
@@ -82,7 +81,7 @@ class Query(object):
             'accept': 'application/json',
             'Authorization': 'Bearer {}'.format(self.Token)
         }
-        url = 'https://{}/query/execute/{}/result'.format(self.Server, self.QueryId)
+        url = 'https://{}/api/query/execute/{}/result'.format(self.Server, self.QueryId)
         logger.info("Getting URL: {}".format(url))
         resp = requests.get(url, headers=headers)
         if resp.status_code == 200:
@@ -102,12 +101,11 @@ class Query(object):
             'accept': 'application/json',
             'Authorization': 'Bearer {}'.format(self.Token)
         }
-        url = 'https://{}/query/execute'.format(self.Server)
+        url = 'https://{}/api/query/execute'.format(self.Server)
         payload = dict()
         payload["queryId"] = self.QueryId
         payload["query"] = self.SQLString
-        payload["offset"] = self.Offset
-        payload["limit"] = self.WindowSize
+        payload["pageSize"] = self.PageSize
         logger.info("Posting URL: {}, with payload: {}".format(url, payload))
         resp = requests.post(url, headers=headers, json=payload)
 
@@ -124,10 +122,9 @@ class Query(object):
         self.DataSlices.append(dataDict)
         logger.info("Processing query...{}".format(self.QueryResult.queryId))
 
-        if self.QueryResult.status == "Finished":
+        if self.QueryResult.status == "Finished" or self.QueryResult.status == "ResultsReady":
             if self.QueryResult.hasNext:
                 logger.info("Query is finished, but has more, so paging...")
-                self.Offset = self.Offset + self.WindowSize
                 print(self)
                 self.executeQuery()
         elif self.QueryResult.status == "Running":
@@ -180,7 +177,7 @@ def getOnTheWire(endpoint):
         'accept': 'application/json',
         'Authorization': 'Bearer {}'.format(token())
     }
-    url = 'https://{}/query{}'.format(server(), endpoint)
+    url = 'https://{}/api{}'.format(server(), endpoint)
     resp = requests.get(url, headers = headers)
     if resp.status_code == 200:
         data = resp.json()
@@ -232,7 +229,7 @@ def getDatabases():
     curlstring = 'curl -X GET "https://$CONDUIT_SERVER/query/metadata/databases" -H  "accept: application/json" -H "Authorization: Bearer $CONDUIT_TOKEN"'
     logger.debug("Calling getDatabases, equivalent curl: {}".format(curlstring))
     data = getOnTheWire("/metadata/databases")
-    print(data)
+    #print(data)
     if data != None:
         dbs = []
         for db in data['databases']:
@@ -242,15 +239,15 @@ def getDatabases():
     else:
         logger.error("Error in the getDatabases call: curl would be {}".format(curlstring))
 
-def executeQuery(sqlstring, windowSize, timeout):
+def executeQuery(sqlstring, pageSize, timeout):
     """Executes a query on the query/execute Conduit endpoint.
 
     :param sqlstring: The SQL String you wish to execute. You may want to put a LIMIT clause on it.
-    :param windowSize: This is the pagination window that you desire.
+    :param pageSize: This is the pagination window that you desire.
     :param timeout: This is the value (in seconds) that you wish to wait before canceling.
     :return: This returns a list of dictionaries of the appropriate window size.
     """
-    query = Query(server(), token(), sqlstring, windowSize, timeout)
+    query = Query(server(), token(), sqlstring, pageSize, timeout)
     query.executeQuery()
     data = query.DataSlices
     return data
@@ -266,9 +263,9 @@ if __name__ == "__main__":
     #     print(tbl)
 
     #data = executeQuery("SELECT * FROM `file_costi_blob`.`titanic.csv` LIMIT 50000", 100000, 1)
-    data = executeQuery("SELECT * FROM postgresql_postgres_conduit.public___taxi_dataset LIMIT 10000", 10000, 1)
-    for slice in data:
-         print(slice)
+    # data = executeQuery("SELECT * FROM `oracle_flights`.`PDBADMIN___FLIGHTS` LIMIT 5000", 10000, 100)
+    # for slice in data:
+    #      print(slice)
 
     #cancelQuery(query)
     #query = executeAsyncQuery("SELECT * FROM sql_synapse_flights.TransStats___vw_airport_parsed LIMIT 1000000")
@@ -277,7 +274,15 @@ if __name__ == "__main__":
     #print(query.data)
     #if query.status == "Running":
     #    cancelQuery(query)
-
+    #
     # dbs = getDatabases()
     # for db in dbs:
     #      print(db)
+    #
+    # tables = getTables('sql_x_challenge')
+    # for table in tables:
+    #     print(table)
+    #
+    # cols = getTableSchema('sql_x_challenge', 'dbo___vTargetMail')
+    # for c in cols:
+    #     print(c)
